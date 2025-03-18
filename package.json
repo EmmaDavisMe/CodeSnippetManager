@@ -1,0 +1,12 @@
+{
+  "name": "code-snippet-manager",
+  "version": "1.0.0",
+  "description": "A simple web-based tool for managing and organizing code snippets",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000"
+  },
+  "keywords": ["code", "snippets", "manager", "developer-tools"],
+  "author": "EmmaDavisMe",
+  "license": "MIT"
+}

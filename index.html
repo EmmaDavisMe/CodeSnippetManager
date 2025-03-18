@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Snippet Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Code Snippet Manager</h1>
+            <p>Organize and manage your code snippets</p>
+        </header>
+        
+        <main>
+            <section class="add-snippet">
+                <h2>Add New Snippet</h2>
+                <form id="snippet-form">
+                    <input type="text" id="snippet-title" placeholder="Title" required>
+                    <select id="snippet-language">
+                        <option value="">Select Language</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="python">Python</option>
+                        <option value="css">CSS</option>
+                        <option value="html">HTML</option>
+                    </select>
+                    <textarea id="snippet-code" placeholder="Your code here..." required></textarea>
+                    <input type="text" id="snippet-tags" placeholder="Tags (comma separated)">
+                    <button type="submit">Add Snippet</button>
+                </form>
+            </section>
+            
+            <section class="snippets-list">
+                <h2>Your Snippets</h2>
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search snippets...">
+                </div>
+                <div id="snippets-container">
+                    <!-- Snippets will be displayed here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
