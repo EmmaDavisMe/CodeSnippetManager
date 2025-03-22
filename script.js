@@ -71,7 +71,8 @@ class CodeSnippetManager {
                     <div class="snippet-title">${this.escapeHtml(snippet.title)}</div>
                     <div>
                         ${snippet.language ? `<span class="snippet-language">${snippet.language}</span>` : ''}
-                        <button onclick="snippetManager.deleteSnippet(${snippet.id})" style="background: #e53e3e; margin-left: 10px;">Delete</button>
+                        <button onclick="snippetManager.copyToClipboard(${snippet.id})" style="background: #38a169; margin-left: 10px;">Copy</button>
+                        <button onclick="snippetManager.deleteSnippet(${snippet.id})" style="background: #e53e3e; margin-left: 5px;">Delete</button>
                     </div>
                 </div>
                 <div class="snippet-code">${this.escapeHtml(snippet.code)}</div>
@@ -83,6 +84,26 @@ class CodeSnippetManager {
                 <small style="color: #666;">Created: ${new Date(snippet.createdAt).toLocaleDateString()}</small>
             </div>
         `).join('');
+    }
+
+    copyToClipboard(id) {
+        const snippet = this.snippets.find(s => s.id === id);
+        if (!snippet) return;
+
+        navigator.clipboard.writeText(snippet.code).then(() => {
+            const copyButton = event.target;
+            const originalText = copyButton.textContent;
+            copyButton.textContent = 'Copied!';
+            copyButton.style.background = '#48bb78';
+            
+            setTimeout(() => {
+                copyButton.textContent = originalText;
+                copyButton.style.background = '#38a169';
+            }, 2000);
+        }).catch(err => {
+            alert('Failed to copy to clipboard');
+            console.error('Copy failed:', err);
+        });
     }
 
     deleteSnippet(id) {
