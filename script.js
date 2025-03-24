@@ -12,6 +12,9 @@ class CodeSnippetManager {
     setupEventListeners() {
         const form = document.getElementById('snippet-form');
         const searchInput = document.getElementById('search-input');
+        const exportBtn = document.getElementById('export-btn');
+        const importBtn = document.getElementById('import-btn');
+        const importFile = document.getElementById('import-file');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -20,6 +23,18 @@ class CodeSnippetManager {
 
         searchInput.addEventListener('input', (e) => {
             this.searchSnippets(e.target.value);
+        });
+
+        exportBtn.addEventListener('click', () => {
+            this.exportSnippets();
+        });
+
+        importBtn.addEventListener('click', () => {
+            importFile.click();
+        });
+
+        importFile.addEventListener('change', (e) => {
+            this.importSnippets(e.target.files[0]);
         });
     }
 
@@ -128,6 +143,67 @@ class CodeSnippetManager {
         );
 
         this.renderSnippets(filtered);
+    }
+
+    exportSnippets() {
+        if (this.snippets.length === 0) {
+            alert('No snippets to export');
+            return;
+        }
+
+        const exportData = {
+            exportDate: new Date().toISOString(),
+            version: '1.0',
+            snippets: this.snippets
+        };
+
+        const dataStr = JSON.stringify(exportData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(dataBlob);
+        link.download = `code-snippets-${new Date().toISOString().split('T')[0]}.json`;
+        link.click();
+        
+        URL.revokeObjectURL(link.href);
+    }
+
+    importSnippets(file) {
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                if (!data.snippets || !Array.isArray(data.snippets)) {
+                    alert('Invalid file format');
+                    return;
+                }
+
+                const confirmed = confirm(`Import ${data.snippets.length} snippets? This will add to your existing snippets.`);
+                if (!confirmed) return;
+
+                const importedSnippets = data.snippets.map(snippet => ({
+                    ...snippet,
+                    id: Date.now() + Math.random(),
+                    createdAt: snippet.createdAt || new Date().toISOString()
+                }));
+
+                this.snippets = [...importedSnippets, ...this.snippets];
+                this.saveToStorage();
+                this.renderSnippets();
+                
+                alert(`Successfully imported ${importedSnippets.length} snippets!`);
+                
+                document.getElementById('import-file').value = '';
+            } catch (error) {
+                alert('Error reading file. Please make sure it\'s a valid JSON file.');
+                console.error('Import error:', error);
+            }
+        };
+        
+        reader.readAsText(file);
     }
 
     escapeHtml(text) {

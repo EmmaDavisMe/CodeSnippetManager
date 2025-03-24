@@ -51,6 +51,11 @@
                 <h2>Your Snippets</h2>
                 <div class="search-bar">
                     <input type="text" id="search-input" placeholder="Search snippets...">
+                    <div class="import-export-controls">
+                        <button id="export-btn">Export All</button>
+                        <input type="file" id="import-file" accept=".json" style="display: none;">
+                        <button id="import-btn">Import</button>
+                    </div>
                 </div>
                 <div id="snippets-container">
                     <!-- Snippets will be displayed here -->
