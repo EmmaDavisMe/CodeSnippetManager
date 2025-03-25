@@ -1,0 +1,46 @@
+{
+  "exportDate": "2025-03-24T20:30:00.000Z",
+  "version": "1.0",
+  "snippets": [
+    {
+      "id": 1711296000001,
+      "title": "Array Sum Function",
+      "language": "javascript",
+      "code": "function sumArray(arr) {\n    return arr.reduce((sum, num) => sum + num, 0);\n}\n\n// Usage: sumArray([1, 2, 3, 4]) // returns 10",
+      "tags": ["array", "reduce", "utility"],
+      "createdAt": "2025-03-20T10:30:00.000Z"
+    },
+    {
+      "id": 1711296000002,
+      "title": "Python List Comprehension",
+      "language": "python",
+      "code": "# Filter and square even numbers\neven_squares = [x**2 for x in range(10) if x % 2 == 0]\nprint(even_squares)  # [0, 4, 16, 36, 64]",
+      "tags": ["python", "list-comprehension", "filter"],
+      "createdAt": "2025-03-21T14:15:00.000Z"
+    },
+    {
+      "id": 1711296000003,
+      "title": "CSS Flexbox Center",
+      "language": "css",
+      "code": ".container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n}",
+      "tags": ["css", "flexbox", "center", "layout"],
+      "createdAt": "2025-03-22T09:45:00.000Z"
+    },
+    {
+      "id": 1711296000004,
+      "title": "Git Reset Commands",
+      "language": "bash",
+      "code": "# Undo last commit but keep changes\ngit reset --soft HEAD~1\n\n# Undo last commit and discard changes\ngit reset --hard HEAD~1\n\n# Unstage files\ngit reset HEAD filename",
+      "tags": ["git", "reset", "commands"],
+      "createdAt": "2025-03-23T16:20:00.000Z"
+    },
+    {
+      "id": 1711296000005,
+      "title": "SQL JOIN Query",
+      "language": "sql",
+      "code": "SELECT u.name, p.title\nFROM users u\nINNER JOIN posts p ON u.id = p.user_id\nWHERE u.active = 1\nORDER BY p.created_at DESC;",
+      "tags": ["sql", "join", "query"],
+      "createdAt": "2025-03-24T11:10:00.000Z"
+    }
+  ]
+}
