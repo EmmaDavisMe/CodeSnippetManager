@@ -36,6 +36,28 @@ class CodeSnippetManager {
         importFile.addEventListener('change', (e) => {
             this.importSnippets(e.target.files[0]);
         });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + Enter to submit form
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.closest('#snippet-form')) {
+                    e.preventDefault();
+                    this.addSnippet();
+                }
+            }
+            
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput.value) {
+                    searchInput.value = '';
+                    this.renderSnippets();
+                    searchInput.focus();
+                }
+            }
+        });
     }
 
     addSnippet() {
@@ -45,7 +67,7 @@ class CodeSnippetManager {
         const tags = document.getElementById('snippet-tags').value.trim();
 
         if (!title || !code) {
-            alert('Please fill in title and code fields');
+            this.showMessage('Please fill in title and code fields', 'error');
             return;
         }
 
@@ -62,6 +84,7 @@ class CodeSnippetManager {
         this.saveToStorage();
         this.renderSnippets();
         this.clearForm();
+        this.showMessage('Snippet added successfully!', 'success');
     }
 
     clearForm() {
@@ -116,7 +139,7 @@ class CodeSnippetManager {
                 copyButton.style.background = '#38a169';
             }, 2000);
         }).catch(err => {
-            alert('Failed to copy to clipboard');
+            this.showMessage('Failed to copy to clipboard', 'error');
             console.error('Copy failed:', err);
         });
     }
@@ -147,7 +170,7 @@ class CodeSnippetManager {
 
     exportSnippets() {
         if (this.snippets.length === 0) {
-            alert('No snippets to export');
+            this.showMessage('No snippets to export', 'error');
             return;
         }
 
@@ -177,7 +200,7 @@ class CodeSnippetManager {
                 const data = JSON.parse(e.target.result);
                 
                 if (!data.snippets || !Array.isArray(data.snippets)) {
-                    alert('Invalid file format');
+                    this.showMessage('Invalid file format', 'error');
                     return;
                 }
 
@@ -194,16 +217,40 @@ class CodeSnippetManager {
                 this.saveToStorage();
                 this.renderSnippets();
                 
-                alert(`Successfully imported ${importedSnippets.length} snippets!`);
+                this.showMessage(`Successfully imported ${importedSnippets.length} snippets!`, 'success');
                 
                 document.getElementById('import-file').value = '';
             } catch (error) {
-                alert('Error reading file. Please make sure it\'s a valid JSON file.');
+                this.showMessage('Error reading file. Please make sure it\'s a valid JSON file.', 'error');
                 console.error('Import error:', error);
             }
         };
         
         reader.readAsText(file);
+    }
+
+    showMessage(text, type = 'info') {
+        // Remove existing message if any
+        const existingMsg = document.querySelector('.message-toast');
+        if (existingMsg) {
+            existingMsg.remove();
+        }
+
+        const message = document.createElement('div');
+        message.className = `message-toast message-${type}`;
+        message.textContent = text;
+        
+        document.body.appendChild(message);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            message.classList.add('fade-out');
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.parentNode.removeChild(message);
+                }
+            }, 300);
+        }, 3000);
     }
 
     escapeHtml(text) {
