@@ -97,6 +97,10 @@ class CodeSnippetManager {
 
     renderSnippets(snippetsToRender = this.snippets) {
         const container = document.getElementById('snippets-container');
+        const countBadge = document.getElementById('snippet-count');
+        
+        // Update count badge
+        countBadge.textContent = this.snippets.length;
         
         if (snippetsToRender.length === 0) {
             container.innerHTML = '<p style="text-align: center; color: #666;">No snippets found. Add your first snippet above!</p>';
